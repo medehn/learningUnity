@@ -12,7 +12,7 @@ public class Utils  {
 
             if (bc == null)
                 return;
-
+              
             Gizmos.color = color;
             Matrix4x4 oldMatrix = Gizmos.matrix;
             Gizmos.matrix = mb.transform.localToWorldMatrix;

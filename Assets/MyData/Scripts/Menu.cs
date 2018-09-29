@@ -2,47 +2,57 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Menu : MonoBehaviour {
+public class Menu : MonoBehaviour
+{
+    public GameObject menuRoot;
 
-	// Use this for initialization
-	void Start () {
-
+    // Use this for initialization
+    void Start()
+    {
         //menu off at start of game
-        GetComponent<Canvas>().enabled = false;
+        menuRoot.SetActive(false);
 
     }
 
     //to make sure that menu is only opened or closed once at a time, default false
     private bool keyPressed = false;
 
-	// Update is called once per frame
-	void Update () {
-
+    // Update is called once per frame
+    void Update()
+    {
         //Menu Key pressed: invert visibility of menu
         if (Input.GetAxisRaw("Menu") > 0f)
         {
-            if(!keyPressed)
-                GetComponent<Canvas>().enabled = !GetComponent<Canvas>().enabled;
-                keyPressed = true;
+            if (!keyPressed)
+            {
+                menuRoot.SetActive(!menuRoot.activeSelf);
+
+                Time.timeScale = menuRoot.activeSelf ? 0f : 1f; //ternär - 1. if (canvas enabled) ?true -->0f, :false -->1f setting time to zero when menu is visible
+            }
+           keyPressed = true;
         }
         else
-            keyPressed = false; //as updated every frame, this checks if the menu key was pressed in the frame, if not pressed trigger menu only once
-	}
+        {
+            keyPressed = false;
+        }
+    }
 
-    //start new game on button click in menu
-    public void startGameButton()
-    {
-        SaveGameData.current = new SaveGameData();
-        LevelManager lm = FindObjectOfType<LevelManager>();
-        lm.loadScene("Level1");
+        //start new game on button click in menu
+        public void startGameButton()
+        {
+            
+            SaveGameData.current = new SaveGameData();
+            LevelManager lm = FindObjectOfType<LevelManager>();
+            lm.loadScene("Level1");
 
-        GetComponent<Canvas>().enabled = false;
+        menuRoot.SetActive(false);
+            Time.timeScale = 1f;
 
     }
 
-    public void quitGameButton()
-    {
-        Application.Quit();
-        Debug.Log("Spiel beenden!");
+        public void quitGameButton()
+        {
+            Application.Quit();
+            Debug.Log("Spiel beenden!");
+        }
     }
-}
