@@ -67,6 +67,27 @@ public class Player : Saveable
     // Update is called once per frame
     private void Update()
     {
+        //when player falls off plane - player dies
+        if (transform.position.y < -1.4f)
+        {
+            
+            //adding fading to player
+            ScreenFader sf = FindObjectOfType<ScreenFader>();
+            sf.fadeOut(true);
+
+            CinemachineVirtualCamera cvc = FindObjectOfType<CinemachineVirtualCamera>();
+
+            //when fadeOut starts, camera stops following player
+            if (cvc != null)
+            {
+                cvc.Follow = null ;
+                cvc.LookAt = null ;
+            }
+
+
+            enabled = false; //deactivating script when player fell
+            return;
+        }
 
         if (Time.timeScale == 0f) return;//when paused, stop all following updates
 

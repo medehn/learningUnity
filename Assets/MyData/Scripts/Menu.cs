@@ -1,14 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
     public GameObject menuRoot;
+    
 
     // Use this for initialization
     void Start()
     {
+        menuRoot.gameObject.SetActive(true);
+      
+
         //menu off at start of game
         menuRoot.SetActive(false);
 
