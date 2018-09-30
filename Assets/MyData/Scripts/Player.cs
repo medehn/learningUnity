@@ -42,6 +42,7 @@ public class Player : Saveable
         anim = GetComponentInChildren<Animator>();
 
         base.Start();
+        setRagdollMode(false);
     }
 
     //what happens when game is saved
@@ -63,10 +64,37 @@ public class Player : Saveable
             transform.position = savegame.playerPosition;
     }
 
+    //switching on/off ragdoll-mode (character dies)
+    private void setRagdollMode(bool isDead) {
 
+        //if isdead = true: switch components off and ragdoll on
+
+
+        GetComponent<Rigidbody>().isKinematic = isDead;
+        GetComponent<Collider>().enabled = !isDead;
+        GetComponentInChildren<Animator>().enabled = !isDead;
+
+        foreach(CapsuleCollider c in GetComponentsInChildren<CapsuleCollider>())
+        {
+            c.enabled = isDead;
+        }
+        foreach(Rigidbody r in GetComponentsInChildren<Rigidbody>())
+        {
+            r.isKinematic = !isDead;
+        }
+
+    }
     // Update is called once per frame
     private void Update()
     {
+        //Simulation of ragdoll-death
+        if (Input.GetKeyUp(KeyCode.Alpha9))
+        {
+            setRagdollMode(true);
+            enabled = false; //disabling player script
+            return;
+        }
+
         //when player falls off plane - player dies
         if (transform.position.y < -1.4f)
         {
