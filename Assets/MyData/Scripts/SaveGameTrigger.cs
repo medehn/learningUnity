@@ -13,16 +13,26 @@ public class SaveGameTrigger : MonoBehaviour {
     {
         SaveGameData saveGame = SaveGameData.current;
 
-        if (saveGame.lastTriggerID != ID)
+        Player p = other.gameObject.GetComponent<Player>();
+
+        if (p == null)
         {
-            saveGame.lastTriggerID = ID;
-            saveGame.save();
+            //collision with something else than player, so ignore this collision! dont save when barrel saves :)
+            return;
         }
-
-        else Debug.Log("Already saved!");
-    }
-
-
+        else if (p.health <= 0f)
+        {
+            //dont save if player falls into saving point while dying
+            return;
+        }
+        else if (saveGame.lastTriggerID == ID)
+        {
+            Debug.Log("Already saved!");
+        }
+        else {
+            saveGame.lastTriggerID = ID;
+            saveGame.save(); 
+        } }
 
     private void OnDrawGizmos()
     {
